@@ -1,11 +1,9 @@
 id: io.github.martinrotter.rssguard
 runtime: org.kde.Platform
 runtime-version: '6.10'
-base: io.qt.qtwebengine.BaseApp
-base-version: '6.10'
 sdk: org.kde.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.node24
+  - org.freedesktop.Sdk.Extension.golang # To build rssguard-article-extractor
 command: rssguard
 
 finish-args:
@@ -15,16 +13,8 @@ finish-args:
   - --socket=fallback-x11
   - --socket=pulseaudio
   - --socket=wayland
-  - --filesystem=xdg-download
   - --talk-name=org.kde.StatusNotifierWatcher
   - --talk-name=org.freedesktop.Notifications
-  - --system-talk-name=org.freedesktop.UPower
-
-cleanup:
-  - /lib/*.a
-
-cleanup-commands:
-  - /app/cleanup-BaseApp.sh
 
 modules:
   - name: libmpv
@@ -137,13 +127,6 @@ modules:
           stable-only: true
           url-template: https://github.com/denoland/deno/releases/download/v$version/deno-aarch64-unknown-linux-gnu.zip
 
-  - name: nodejs-and-npm
-    buildsystem: simple
-    build-commands:
-      - mkdir -p /app/{bin,lib}
-      - cp -a /usr/lib/sdk/node24/bin/{node,npm} /app/bin
-      - cp -a /usr/lib/sdk/node24/lib/* /app/lib
-
   - name: clang-format
     buildsystem: simple
     build-commands:
@@ -169,29 +152,28 @@ modules:
 
   - name: rssguard
     buildsystem: cmake-ninja
+    build-options:
+      append-path: /usr/lib/sdk/golang/bin
+      env:
+        GOROOT: /usr/lib/sdk/golang
     config-opts:
-      - -DBUILD_WITH_QT6=ON
-      - -DENABLE_COMPRESSED_SITEMAP=ON
-      - -DENABLE_MEDIAPLAYER_LIBMPV=ON
-      - -DENABLE_MEDIAPLAYER_QTMULTIMEDIA=OFF
-      - -DFORCE_BUNDLE_ICONS=ON
       - -DIS_FLATPAK_BUILD=ON
-      - -DNO_LITE=ON
       - -DNO_UPDATE_CHECK=ON
     sources:
-      - type: archive
-        dest-filename: rssguard.tar.gz
-        url: https://api.github.com/repos/martinrotter/rssguard/tarball/4.8.6
-        sha256: c1ec4ce2157240679bb5e3d5f1d8b3fef3553b88723673313ac2a1bfe28143fe
+      - type: git
+        url: https://github.com/martinrotter/rssguard.git
+        commit: bcb3f77cec497b824674e4d165c8c2736c41367e
+        # tag: 5.0.0
         x-checker-data:
-          type: json
-          url: https://api.github.com/repos/martinrotter/rssguard/releases/latest
-          version-query: .tag_name
-          url-query: .tarball_url
-      # https://github.com/martinrotter/rssguard/commit/7ec01c8dbafe45b55f133b0fd89384e8cb953abe
-      - type: patch
-        paths:
-          - patches/0001-Set-a-fixed-release-date.patch
-          - patches/Update-ghostery-adblocker-version.patch
+          type: git
+          tag-pattern: ^([\d.]+)$
+      # Go dependencies for rssguard-article-extractor.
+      # Generated with:
+      # $ go run github.com/dennwc/flatpak-go-mod@956509d \
+      #   -module-name rssguard-article-extractor \
+      #   -dest-pref resources/scripts/standalone/article-extractor/ \
+      #   /path/to/rssguard/resources/scripts/standalone/article-extractor
+      # Then, copy both 'rssguard-article-extractor.go.mod.yml' and 'rssguard-article-extractor.modules.txt' here.
+      - rssguard-article-extractor.go.mod.yml
     cleanup:
       - /include
