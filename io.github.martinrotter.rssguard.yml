@@ -6,6 +6,7 @@ base-version: '6.8'
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node20
+  - org.freedesktop.Sdk.Extension.rust-stable
 command: rssguard
 
 finish-args:
@@ -95,6 +96,28 @@ modules:
               project-id: 17166
               stable-only: true
               url-template: https://xorg.freedesktop.org/archive/individual/lib/libXpresent-$version.tar.xz
+
+  - name: deno
+    buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/rust-stable/bin
+      env:
+        CARGO_HOME: /run/build/deno/cargo
+        CARGO_NET_OFFLINE: 'true'
+    build-commands:
+      - cargo --offline fetch --manifest-path Cargo.toml --verbose
+      - cargo build --offline --release
+      - install -Dm0755 target/release/deno -t ${FLATPAK_DEST}/bin
+    sources:
+      - type: archive
+        url: https://github.com/denoland/deno/archive/refs/tags/v2.5.6.tar.gz
+        sha256: cc12a16d167f754f6e473fa8dba6a7a536761463091c15c44b4a6d43ac80c5f5
+        x-checker-data:
+          type: anitya
+          project-id: 133196
+          stable-only: true
+          url-template: https://github.com/denoland/deno/archive/refs/tags/v$version.tar.gz
+      - cargo-sources.json
 
   - name: yt-dlp
     no-autogen: true
