@@ -135,7 +135,7 @@ modules:
         sources:
           - type: archive
             url: https://github.com/denoland/rusty_v8/archive/refs/tags/v142.1.0.tar.gz
-            sha256: cc12a16d167f754f6e473fa8dba6a7a536761463091c15c44b4a6d43ac80c5f5
+            sha256: c59196790c57cc8795db18522c4fa93dcb29e0f7e5341969d76ecb19f0f34385
             x-checker-data:
               type: anitya
               project-id: 385256
