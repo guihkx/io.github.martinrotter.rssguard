@@ -133,14 +133,12 @@ modules:
           - ls -laR
           - install -Dm0755 target/release/deno -t ${FLATPAK_DEST}/bin
         sources:
-          - type: archive
-            url: https://github.com/denoland/rusty_v8/archive/refs/tags/v142.1.0.tar.gz
-            sha256: c59196790c57cc8795db18522c4fa93dcb29e0f7e5341969d76ecb19f0f34385
+          - type: git
+            url: https://github.com/denoland/rusty_v8.git
+            commit: 4d5b674273ffc51f6293fcc43f93af16fefc1106
             x-checker-data:
-              type: anitya
-              project-id: 385256
-              stable-only: true
-              url-template: https://github.com/denoland/rusty_v8/archive/refs/tags/v$version.tar.gz
+              type: git
+              tag-pattern: ^v([\d.]+)$
           - cargo-sources-rusty_v8.json
 
   - name: yt-dlp
