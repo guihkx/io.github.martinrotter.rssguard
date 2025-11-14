@@ -131,11 +131,11 @@ modules:
           - cargo --offline fetch --manifest-path Cargo.toml --verbose
           - cargo build --offline -vv
           - ls -laR
-          - install -Dm0755 target/release/deno -t ${FLATPAK_DEST}/bin
         sources:
           - type: git
             url: https://github.com/denoland/rusty_v8.git
             commit: 4d5b674273ffc51f6293fcc43f93af16fefc1106
+            tag: v142.1.0
             x-checker-data:
               type: git
               tag-pattern: ^v([\d.]+)$
