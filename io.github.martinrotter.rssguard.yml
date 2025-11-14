@@ -130,7 +130,7 @@ modules:
             DISABLE_CLANG: '1'
         build-commands:
           - cargo --offline fetch --manifest-path Cargo.toml --verbose
-          - ls -l third_party
+          - ls -l third_party/rust-toolchain
           - cargo build --offline -vv
           - ls -laR
         sources:
@@ -148,6 +148,7 @@ modules:
           # https://raw.githubusercontent.com/denoland/rusty_v8/refs/tags/v142.1.0/tools/download_file.py
           - type: archive
             dest: third_party/rust-toolchain
+            strip-components: 0
             url: https://storage.googleapis.com/chromium-browser-clang/Linux_x64/rust-toolchain-15283f6fe95e5b604273d13a428bab5fc0788f5a-1-llvmorg-22-init-8940-g4d4cb757.tar.xz
             sha256: 2bdaea0b11cb11a8f2f4dcb79b0dbb4bf38e2bd22479ff8014f55b9b6890e135
         modules:
