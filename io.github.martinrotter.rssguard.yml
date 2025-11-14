@@ -117,7 +117,31 @@ modules:
           project-id: 133196
           stable-only: true
           url-template: https://github.com/denoland/deno/archive/refs/tags/v$version.tar.gz
-      - cargo-sources.json
+      - cargo-sources-deno.json
+    modules:
+      - name: rusty_v8
+        buildsystem: simple
+        build-options:
+          append-path: /usr/lib/sdk/rust-stable/bin
+          env:
+            CARGO_HOME: /run/build/rusty_v8/cargo
+            CARGO_NET_OFFLINE: 'true'
+            V8_FROM_SOURCE: '1'
+        build-commands:
+          - cargo --offline fetch --manifest-path Cargo.toml --verbose
+          - cargo build --offline -vv
+          - ls -laR
+          - install -Dm0755 target/release/deno -t ${FLATPAK_DEST}/bin
+        sources:
+          - type: archive
+            url: https://github.com/denoland/rusty_v8/archive/refs/tags/v142.1.0.tar.gz
+            sha256: cc12a16d167f754f6e473fa8dba6a7a536761463091c15c44b4a6d43ac80c5f5
+            x-checker-data:
+              type: anitya
+              project-id: 385256
+              stable-only: true
+              url-template: https://github.com/denoland/rusty_v8/archive/refs/tags/v$version.tar.gz
+          - cargo-sources-rusty_v8.json
 
   - name: yt-dlp
     no-autogen: true
