@@ -127,8 +127,8 @@ modules:
           env:
             CARGO_HOME: /run/build/rusty_v8/cargo
             CARGO_NET_OFFLINE: 'true'
+            CLANG_BASE_PATH: /usr/lib/sdk/llvm20
             V8_FROM_SOURCE: '1'
-            DISABLE_CLANG: '1'
         build-commands:
           - cargo --offline fetch --manifest-path Cargo.toml --verbose
           - ls -l third_party/rust-toolchain
