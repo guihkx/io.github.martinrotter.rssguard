@@ -121,41 +121,28 @@ modules:
     modules:
       - name: rusty_v8
         buildsystem: simple
-        build-options:
-          append-path: /usr/lib/sdk/rust-stable/bin
-          env:
-            CARGO_HOME: /run/build/rusty_v8/cargo
-            CARGO_NET_OFFLINE: 'true'
-            V8_FROM_SOURCE: '1'
         build-commands:
-          - cargo --offline fetch --manifest-path Cargo.toml --verbose
-          - cargo build --offline -vv
           - ls -laR
+          - mv librusty_v8_release_* /app/lib
         sources:
-          - type: git
-            url: https://github.com/denoland/rusty_v8.git
-            commit: 4d5b674273ffc51f6293fcc43f93af16fefc1106
-            tag: v142.1.0
+          - type: archive
+            only-arches:
+              - x86_64
+            url: https://github.com/denoland/rusty_v8/releases/download/v142.1.0/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz
+            sha256: cd46ad73918d92ab7ff640f0d58fd48dfe12b8c746ee2185d6e79a2b9c1cc332
             x-checker-data:
-              type: git
-              tag-pattern: ^v([\d.]+)$
-          - cargo-sources-rusty_v8.json
-        modules:
-          - name: gn
-            buildsystem: simple
-            build-options:
-              env:
-                CC: gcc
-                CXX: g++
-            build-commands:
-              - ./build/gen.py
-              - ninja -C out gn
-              - install -Dm755 out/gn "$FLATPAK_DEST/bin/gn"
-            sources:
-              - type: git
-                url: https://gn.googlesource.com/gn
-                commit: 748c9571f3d18820a7989a880d5ddf220e54af1b
-                disable-shallow-clone: true
+              type: anitya
+              project-id: 385256
+              url-template: https://github.com/denoland/rusty_v8/releases/download/v$version/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz
+          - type: archive
+            only-arches:
+              - aarch64
+            url: https://github.com/denoland/rusty_v8/releases/download/v142.1.0/librusty_v8_release_x86_64-unknown-linux-gnu.a.gz
+            sha256: 38441e9c0bdb7b758c8a8f307779a2e17ff38e478306fa204b54d0b99fc81582
+            x-checker-data:
+              type: anitya
+              project-id: 385256
+              url-template: https://github.com/denoland/rusty_v8/releases/download/v$version/librusty_v8_release_aarch64-unknown-linux-gnu.a.gz
 
   - name: yt-dlp
     no-autogen: true
