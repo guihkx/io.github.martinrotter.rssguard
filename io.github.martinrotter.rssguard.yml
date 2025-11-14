@@ -129,6 +129,7 @@ modules:
             V8_FROM_SOURCE: '1'
         build-commands:
           - cargo --offline fetch --manifest-path Cargo.toml --verbose
+          - mkdir third_party/rust-toolchain
           - cargo build --offline -vv
           - ls -laR
         sources:
@@ -140,6 +141,10 @@ modules:
               type: git
               tag-pattern: ^v([\d.]+)$
           - cargo-sources-rusty_v8.json
+          # https://github.com/denoland/rusty_v8/blob/v142.1.0/tools/rust_toolchain.py
+          # https://github.com/denoland/rusty_v8/blob/v142.1.0/tools/v8_deps.py
+          # https://github.com/denoland/v8/blob/d86ca95b57fb8a0e6dc8c5951a78adc9b8832512/DEPS
+          # https://raw.githubusercontent.com/denoland/rusty_v8/refs/tags/v142.1.0/tools/download_file.py
         modules:
           - name: gn
             buildsystem: simple
