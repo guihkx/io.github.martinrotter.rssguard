@@ -140,6 +140,22 @@ modules:
               type: git
               tag-pattern: ^v([\d.]+)$
           - cargo-sources-rusty_v8.json
+        modules:
+          - name: gn
+            buildsystem: simple
+            build-options:
+              env:
+                CC: gcc
+                CXX: g++
+            build-commands:
+              - ./build/gen.py
+              - ninja -C out gn
+              - install -Dm755 out/gn "$FLATPAK_DEST/bin/gn"
+            sources:
+              - type: git
+                url: https://gn.googlesource.com/gn
+                commit: 748c9571f3d18820a7989a880d5ddf220e54af1b
+                disable-shallow-clone: true
 
   - name: yt-dlp
     no-autogen: true
