@@ -127,6 +127,7 @@ modules:
             CARGO_HOME: /run/build/rusty_v8/cargo
             CARGO_NET_OFFLINE: 'true'
             V8_FROM_SOURCE: '1'
+            DISABLE_CLANG: '1'
         build-commands:
           - cargo --offline fetch --manifest-path Cargo.toml --verbose
           - mkdir third_party/rust-toolchain
