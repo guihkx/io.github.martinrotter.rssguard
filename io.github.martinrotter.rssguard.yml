@@ -122,7 +122,8 @@ modules:
       - name: rusty_v8
         buildsystem: simple
         build-options:
-          append-path: /usr/lib/sdk/rust-stable/bin
+          append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm20/bin
+          prepend-ld-library-path: /usr/lib/sdk/llvm20/lib
           env:
             CARGO_HOME: /run/build/rusty_v8/cargo
             CARGO_NET_OFFLINE: 'true'
@@ -131,7 +132,7 @@ modules:
         build-commands:
           - cargo --offline fetch --manifest-path Cargo.toml --verbose
           - ls -l third_party/rust-toolchain
-          - cargo build --offline -vv
+          - cargo build --offline -vv --libs --bin
           - ls -laR
         sources:
           - type: git
