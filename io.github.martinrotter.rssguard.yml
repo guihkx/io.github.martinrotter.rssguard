@@ -131,6 +131,7 @@ modules:
         build-commands:
           - cargo --offline fetch --manifest-path Cargo.toml --verbose
           - mkdir third_party/rust-toolchain
+          - rustc --version > third_party/rust-toolchain/VERSION
           - cargo build --offline -vv
           - ls -laR
         sources:
