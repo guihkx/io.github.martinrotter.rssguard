@@ -132,7 +132,7 @@ modules:
         build-commands:
           - cargo --offline fetch --manifest-path Cargo.toml --verbose
           - ls -l third_party/rust-toolchain
-          - cargo build --offline -vv --libs --bin
+          - cargo build --offline -vv
           - ls -laR
         sources:
           - type: git
