@@ -128,13 +128,13 @@ modules:
           env:
             CARGO_HOME: /run/build/rusty_v8/cargo
             CARGO_NET_OFFLINE: 'true'
-            CLANG_BASE_PATH: /usr/lib/sdk/llvm20
-            LIBCLANG_PATH: /usr/lib/sdk/llvm20/lib
+            #CLANG_BASE_PATH: /usr/lib/sdk/llvm20
+            #LIBCLANG_PATH: /usr/lib/sdk/llvm20/lib
             V8_FROM_SOURCE: '1'
         build-commands:
           - cargo --offline fetch --manifest-path Cargo.toml --verbose
           - clang --version
-          - cargo build --offline -vv
+          - CLANG_BASE_PATH=$PWD/third_party/clang cargo build --offline -vv
           - ls -laR
         sources:
           - type: git
@@ -154,6 +154,12 @@ modules:
             strip-components: 0
             url: https://storage.googleapis.com/chromium-browser-clang/Linux_x64/rust-toolchain-15283f6fe95e5b604273d13a428bab5fc0788f5a-1-llvmorg-22-init-8940-g4d4cb757.tar.xz
             sha256: 2bdaea0b11cb11a8f2f4dcb79b0dbb4bf38e2bd22479ff8014f55b9b6890e135
+          # https://chromium.googlesource.com/chromium/src/tools/clang.git/+/3dfe6d8b38feb4c6f79c847fb0667ecd019379cb/scripts/update.py
+          - type: archive
+            dest: third_party/clang
+            strip-components: 0
+            url: https://commondatastorage.googleapis.com/chromium-browser-clang/Linux_x64/clang-llvmorg-22-init-12326-g8a5f1533-2.tar.xz
+            sha256: 5a1b3c6739beb69aec58c4131cb6030e913a1ab48c9a340df7df6c570c74f228
         modules:
           - name: gn
             buildsystem: simple
