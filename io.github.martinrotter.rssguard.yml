@@ -6,7 +6,6 @@ base-version: '6.8'
 sdk: org.kde.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.node20
-  - org.freedesktop.Sdk.Extension.rust-stable
 command: rssguard
 
 finish-args:
@@ -99,44 +98,31 @@ modules:
 
   - name: deno
     buildsystem: simple
-    build-options:
-      append-path: /usr/lib/sdk/rust-stable/bin
-      env:
-        CARGO_HOME: /run/build/deno/cargo
-        CARGO_NET_OFFLINE: 'true'
     build-commands:
-      - cargo --offline fetch --manifest-path Cargo.toml --verbose
-      - cargo build --offline --release
-      - install -Dm0755 target/release/deno -t ${FLATPAK_DEST}/bin
+      - install -Dm0755 deno -t /app/bin
     sources:
       - type: archive
-        url: https://github.com/denoland/deno/archive/refs/tags/v2.5.6.tar.gz
-        sha256: cc12a16d167f754f6e473fa8dba6a7a536761463091c15c44b4a6d43ac80c5f5
+        only-arches:
+          - x86_64
+        url: https://github.com/denoland/deno/releases/download/v2.5.6/deno-x86_64-unknown-linux-gnu.zip
+        sha256: fd4f6abc1b6a134fa9a4dba56519f1631f44c88e04e4e3e9a8ff5975dfa66e1a
         x-checker-data:
           type: anitya
           project-id: 133196
           stable-only: true
-          url-template: https://github.com/denoland/deno/archive/refs/tags/v$version.tar.gz
-      - cargo-sources-deno.json
-
-  - name: yt-dlp
-    no-autogen: true
-    no-make-install: true
-    make-args:
-      - yt-dlp
-      - PYTHON=/usr/bin/python3
-    post-install:
-      - install yt-dlp /app/bin
-    sources:
+          url-template: https://github.com/denoland/deno/releases/download/v$version/deno-x86_64-unknown-linux-gnu.zip
       - type: archive
-        dest-filename: yt-dlp.tar.gz
-        url: https://github.com/yt-dlp/yt-dlp/archive/refs/tags/2025.11.12.tar.gz
-        sha256: 6f5f2d716968d6c84d05d179fc1ce50ccca23706b9dbbc3c57fec97a8b9ea440
+        only-arches:
+          - aarch64
+        url: https://github.com/denoland/deno/releases/download/v2.5.6/deno-aarch64-unknown-linux-gnu.zip
+        sha256: f5e60ae3dfceb61e5e5a41f22129e40a8bc17f6393b59e75d7ca19ceef32d824
         x-checker-data:
           type: anitya
-          project-id: 143399
+          project-id: 133196
           stable-only: true
-          url-template: https://github.com/yt-dlp/yt-dlp/archive/refs/tags/$version.tar.gz
+          url-template: https://github.com/denoland/deno/releases/download/v$version/deno-aarch64-unknown-linux-gnu.zip     
+
+  - python3-yt-dlp.json
 
   - name: nodejs-and-npm
     buildsystem: simple
